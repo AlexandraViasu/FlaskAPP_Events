@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <title>{{ title }} - Events</title>
+</head>
+<body>
+    
+    <h1>Upcoming Events:</h1>
+    <div class = "eventboxes">
+    {% for event in events %}
+    <ul>
+        <li>
+           <h2> <b> {{event.name_of_event}} </b>: </h2>
+           <h3> Date:
+                {% if event.date.strftime %}
+                {{event.date.strftime("%b %d %Y")}}
+                {% elif event.date.strftime == None %}
+                {% endif %}
+           </h3>
+
+        <span>
+           <h3>Number of guests attending the event: 
+               {{event.number_guest}}
+           </h3>
+           <h3>Location of the event:
+               {{event.room_location}} 
+           </h3>
+           <h3>Event's description:
+               {{event.description}}
+           </h3>
+        </span>
+                
+                {% if event.recurring %}
+                 <span>
+                    <h4>This is a recurring event, happening every year on the same date.</h4>
+                 </span>
+                {% else %}
+                 <label for="meeting-time"><h4>This is not a recurring event. Please choose a Date for your event:</h4></label>
+                 <input type="datetime-local" id="meeting-time"
+                  name="meeting-time" value="2018-06-12T19:30"
+                  min="2022-06-07T00:00" max="2025-06-14T00:00">
+                {% endif %} 
+
+               <form method = "post" action="/events/delete/{{loop.index0}}">
+               <input type="submit" value = "Delete">
+               </form>
+
+        </li>    
+    </ul>
+    {% endfor %}
+    </div>
+
+    <div class="createevent">   
+     <form action = "/events" method = "post">
+        <label for="title">
+            <h2>
+            Create your own Event
+            </h2>
+            <h3>
+            Name of Event:
+            </h3>
+        </label>
+        <input type="text" name="title" id="title">
+
+        <label for="description">
+            <h3>Description:
+            </h3>
+        </label>
+        <textarea name="description" id="description" cols="30" rows="1"></textarea>
+        
+     
+        <label for="number_guest">
+        <h3>
+        How many guests:
+        </h3>
+        </label>
+        <input type="text" name="number_guest" id="number_guest">
+
+        <label for="room_location">
+            <h3>
+            Event's location:
+            </h3>
+            </label>
+        <input type="text" name="room_location" id="room_location">
+
+        <label for="event_recurring">
+            <h3>
+            Is this a recurring event?
+            </h3>
+            </label>
+        <input type="text" name="event_recurring" id="event_recurring">
+        <input type="submit" value = "Add Event">
+    </form>
+    </div>
+    <ul>
+        <li><a href="/tasks">Home</a></li>
+    </ul>
+    <hr>
+    
+    
+    
+</body>
+</html>
